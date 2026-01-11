@@ -55,7 +55,6 @@
         .tables-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .table-btn { background: white; border: 2px solid var(--gray-light); border-radius: var(--radius); padding: 15px; text-align: center; cursor: pointer; box-shadow: 0 4px 0 #e5e5e5; }
 
-        /* Estilos Repaso */
         .study-row { font-size: 1.5rem; padding: 10px; border-bottom: 1px solid #eee; text-align: center; width: 100%; }
         .nav-footer { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; }
 
@@ -77,7 +76,6 @@
     <div id="start-screen" class="screen active center" style="justify-content: center;">
         <div class="mascot-img">🦉</div>
         <img src="MateMagiaApp_Ico_Lego.png" alt="MateMagia" class="logo-img">
-        <p class="text-center">¡Aprende las tablas jugando!</p>
         <button class="btn" onclick="checkUsersAndStart()">¡Entrar a Clase!</button>
         <button class="btn btn-blue" onclick="navigate('instructions-screen')">¿Cómo jugar?</button>
     </div>
@@ -102,7 +100,7 @@
     <div id="create-user-screen" class="screen center">
         <h2 id="create-title">Nuevo Alumno</h2>
         <div class="avatar-grid" id="create-avatar-grid"></div>
-        <input type="text" id="new-username" class="input-field" placeholder="Tu nombre" maxlength="12" style="padding:15px; width:100%; border-radius:16px; border:2px solid #ddd; text-align:center; font-size:1.2rem;">
+        <input type="text" id="new-username" placeholder="Tu nombre" maxlength="12" style="padding:15px; width:100%; border-radius:16px; border:2px solid #ddd; text-align:center; font-size:1.2rem;">
         <button class="btn mt-20" onclick="createUser()">¡Empezar!</button>
         <button class="btn btn-outline" onclick="navigate('user-select-screen')">Cancelar</button>
     </div>
@@ -117,7 +115,7 @@
         <div class="tables-grid" id="tables-grid"></div>
         <div class="nav-footer">
             <button class="btn btn-blue" style="flex:1" onclick="openReviewMenu()">📘 Repasar</button>
-            <button class="btn btn-outline" style="flex:1" onclick="navigate('settings-screen')">⚙️ Ajustes</button>
+            <button class="btn btn-red" style="flex:1" onclick="logout()">Salir 👋</button>
         </div>
     </div>
 
@@ -136,8 +134,8 @@
             <div class="coin-display">🪙 <span id="game-coins">0</span></div>
         </div>
         <div class="flex-grow center">
-            <div id="question-text" class="question-text" style="font-size:3.5rem; color:var(--secondary); font-weight:900;"></div>
-            <div id="answer-display" class="answer-box"></div>
+            <div id="question-text" style="font-size:3.5rem; color:var(--secondary); font-weight:900;"></div>
+            <div id="answer-display" style="font-size:3rem; border-bottom:3px solid #ccc; min-width:80px; text-align:center; margin-top:10px;"></div>
         </div>
         <div class="numpad">
             <button class="num-btn" onclick="addNum(1)">1</button>
@@ -165,13 +163,6 @@
         <button class="btn" onclick="resumeGame()">Volver a Clase</button>
     </div>
 
-    <div id="settings-screen" class="screen">
-        <h2>Ajustes</h2>
-        <div class="avatar-grid" id="settings-avatar-grid"></div>
-        <button class="btn btn-red" onclick="deleteCurrentUser()">🗑 Eliminar Alumno</button>
-        <button class="btn btn-outline" onclick="saveSettings()">Guardar y Volver</button>
-    </div>
-
     <div id="feedback-modal">
         <h2 id="feedback-title">¡Correcto!</h2>
         <p id="feedback-msg"></p>
@@ -191,7 +182,7 @@
         speak: (text) => {
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
-            msg.lang = 'es-ES'; msg.pitch = 1.4; msg.rate = 1.0; 
+            msg.lang = 'es-ES'; msg.pitch = 1.6; // Voz más aguda
             window.speechSynthesis.speak(msg);
         }
     };
@@ -251,7 +242,7 @@
         document.getElementById('dash-name').innerText = name;
         document.getElementById('dash-score').innerText = currentUser.score;
         renderTablesGrid();
-        AudioEngine.speak("¡Hola " + name + "! Vamos a aprender matemáticas.");
+        AudioEngine.speak("Hola " + name);
         navigate('dashboard-screen');
     }
 
@@ -265,7 +256,6 @@
         }
     }
 
-    // LÓGICA DE REPASO
     function openReviewMenu() {
         currentReviewTable = 1;
         renderReviewTable();
@@ -291,7 +281,6 @@
         renderReviewTable();
     }
 
-    // LÓGICA DE JUEGO
     let game = { table: 1, currentQ: 0, score: 0, ans: 0 };
     function startSession(t) {
         game = { table: t, currentQ: 0, score: 0 };
@@ -316,10 +305,7 @@
     }
 
     function addNum(n) { document.getElementById('answer-display').innerText += n; }
-    function backspace() { 
-        const d = document.getElementById('answer-display');
-        d.innerText = d.innerText.slice(0, -1);
-    }
+    function backspace() { const d = document.getElementById('answer-display'); d.innerText = d.innerText.slice(0, -1); }
 
     function checkAnswer() {
         const userAns = parseInt(document.getElementById('answer-display').innerText);
@@ -329,11 +315,11 @@
             game.score++; currentUser.score++;
             document.getElementById('feedback-title').innerText = "¡Excelente!";
             document.getElementById('feedback-msg').innerText = "+1 Moneda para ti";
-            AudioEngine.speak("¡Muy bien!");
+            AudioEngine.speak("Muy bien");
         } else {
             document.getElementById('feedback-title').innerText = "¡Casi!";
-            document.getElementById('feedback-msg').innerText = "La respuesta era " + game.ans;
-            AudioEngine.speak("No pasa nada, la respuesta era " + game.ans);
+            document.getElementById('feedback-msg').innerText = "Era " + game.ans;
+            AudioEngine.speak("La respuesta era " + game.ans);
         }
         document.getElementById('game-coins').innerText = game.score;
         document.getElementById('dash-score').innerText = currentUser.score;
@@ -342,6 +328,7 @@
 
     function startBreak() { navigate('break-screen'); }
     function resumeGame() { navigate('game-screen'); }
+    function logout() { currentUser = null; navigate('start-screen'); }
     function confirmEndGame() { if(confirm("¿Quieres salir?")) navigate('dashboard-screen'); }
 
     window.onload = checkUsersAndStart;
