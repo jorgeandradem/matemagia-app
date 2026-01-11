@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mate Magia</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-    
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="MateMagiaApp_Ico_Lego.png">
     <link rel="apple-touch-icon" href="MateMagiaApp_Ico_Lego.png">
@@ -14,435 +13,178 @@
 
     <style>
         :root {
-            --primary: #FFC107; /* Amarillo MateMagia */
-            --primary-dark: #FFA000;
-            --secondary: #4CAF50; /* Verde Éxito */
-            --accent: #2196F3; /* Azul Acción */
-            --danger: #FF5252; /* Rojo Error */
-            --text: #455A64;
-            --bg: #F4F7F6;
-            --white: #ffffff;
-            --radius: 20px;
+            --primary: #FFC107; --secondary: #4CAF50; --accent: #2196F3;
+            --danger: #FF5252; --text: #37474F; --bg: #F0F4F8; --radius: 20px;
         }
-
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--bg);
-            margin: 0; display: flex; justify-content: center;
-            height: 100dvh; overflow: hidden; color: var(--text);
-        }
-
-        #app {
-            width: 100%; max-width: 480px; height: 100%;
-            background: var(--white); display: flex; flex-direction: column;
-            position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05);
-        }
-
-        /* PANTALLAS */
-        .screen { display: none; flex-direction: column; height: 100%; padding: 20px; animation: fade 0.3s ease-out; overflow-y: auto; }
+        body { font-family: 'Nunito', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; height: 100dvh; overflow: hidden; color: var(--text); }
+        #app { width: 100%; max-width: 480px; height: 100%; background: #fff; display: flex; flex-direction: column; position: relative; }
+        .screen { display: none; flex-direction: column; height: 100%; padding: 20px; animation: fade 0.3s; overflow-y: auto; }
         .screen.active { display: flex; }
-        @keyframes fade { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
-
-        /* TEXTO & LOGO */
-        h1, h2 { font-family: 'Quicksand', sans-serif; margin: 10px 0; text-align: center; }
-        .logo-img { width: 150px; display: block; margin: 20px auto; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1)); }
-        .center { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        @keyframes fade { from {opacity:0;} to {opacity:1;} }
         .flex { flex-grow: 1; }
-
-        /* BOTONES (Estilo Duolingo) */
+        .center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .row { display: flex; gap: 10px; width: 100%; }
+        h1 { font-family: 'Quicksand', sans-serif; color: var(--accent); margin: 10px 0; }
+        .logo { width: 140px; margin: 20px auto; display: block; }
         .btn {
-            background: var(--accent); color: white; border: none;
-            padding: 16px; border-radius: 16px; width: 100%;
-            font-size: 1.2rem; font-weight: 800; cursor: pointer;
-            box-shadow: 0 4px 0 #1976D2; margin-bottom: 12px;
-            text-transform: uppercase; letter-spacing: 1px; transition: transform 0.1s;
+            background: var(--accent); color: white; border: none; padding: 16px; border-radius: 16px; width: 100%;
+            font-size: 1.2rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 #1976D2; margin-bottom: 12px;
         }
         .btn:active { transform: translateY(4px); box-shadow: none; }
         .btn-green { background: var(--secondary); box-shadow: 0 4px 0 #388E3C; }
         .btn-red { background: var(--danger); box-shadow: 0 4px 0 #D32F2F; }
-        .btn-outline { background: transparent; border: 2px solid #CFD8DC; color: #90A4AE; box-shadow: none; }
-        
-        /* USUARIOS & AVATARES */
-        .avatar-grid { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
-        .av-opt { font-size: 3rem; padding: 10px; border: 3px solid #eee; border-radius: 50%; cursor: pointer; background: white; }
-        .av-opt.selected { border-color: var(--secondary); background: #E8F5E9; transform: scale(1.1); }
-        
-        .user-card {
-            background: #fff; border: 2px solid #ECEFF1; border-radius: 16px; padding: 15px;
-            display: flex; align-items: center; cursor: pointer; margin-bottom: 10px;
-        }
-        .u-av { font-size: 2.5rem; margin-right: 15px; }
-        .u-info { flex-grow: 1; }
-        .u-name { font-weight: bold; font-size: 1.2rem; }
-        .u-score { font-size: 0.9rem; color: #aaa; font-weight: bold; }
-        
-        input { padding: 15px; font-size: 1.2rem; text-align: center; width: 100%; border: 2px solid #ddd; border-radius: 16px; outline: none; font-weight: bold; }
-
+        .btn-outline { background: transparent; border: 2px solid #ccc; color: #888; box-shadow: none; }
+        input { padding: 15px; font-size: 1.3rem; text-align: center; width: 100%; border: 2px solid #ddd; border-radius: 16px; outline: none; margin-bottom: 20px; }
         /* DASHBOARD */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #fff; margin-bottom: 10px; }
-        .medals { font-size: 1.3rem; letter-spacing: 2px; }
-        
-        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-bottom: 20px; }
-        .menu-item {
-            background: #fff; border: 2px solid #ECEFF1; border-radius: 16px; padding: 25px 10px;
-            text-align: center; font-weight: 800; font-size: 1.1rem; cursor: pointer;
-            box-shadow: 0 4px 0 #ECEFF1; color: var(--text);
-        }
-        .menu-item:active { transform: translateY(4px); box-shadow: none; border-color: var(--accent); color: var(--accent); }
-        .menu-item.random { grid-column: span 2; background: #E3F2FD; color: #1976D2; border-color: #BBDEFB; box-shadow: 0 4px 0 #90CAF9; }
-
-        /* JUEGO */
-        .game-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-        .progress-bg { flex: 1; height: 14px; background: #ECEFF1; border-radius: 7px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: 0.3s; }
-        
-        .q-box { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .q-text { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 0; text-shadow: 2px 2px 0 rgba(0,0,0,0.05); }
-        .ans-text { font-size: 3rem; border-bottom: 4px solid #CFD8DC; min-width: 120px; text-align: center; min-height: 60px; margin-top: 10px; color: var(--text); font-weight: bold; }
-
-        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; height: 40%; }
-        .key {
-            background: #fff; border: 2px solid #ECEFF1; border-radius: 12px;
-            font-size: 1.8rem; font-weight: bold; color: var(--text); cursor: pointer;
-            box-shadow: 0 4px 0 #ECEFF1; display: flex; justify-content: center; align-items: center;
-        }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #fff; border-bottom: 1px solid #eee; margin-bottom: 10px; }
+        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .menu-item { background: #fff; border: 2px solid #eee; border-radius: 16px; padding: 20px; text-align: center; font-weight: bold; cursor: pointer; box-shadow: 0 4px 0 #eee; }
+        .menu-item:active { transform: translateY(4px); box-shadow: none; border-color: var(--accent); }
+        .random { grid-column: span 2; background: #E3F2FD; border-color: #BBDEFB; color: #1976D2; }
+        /* GAME */
+        .q-text { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 20px 0; }
+        .ans-text { font-size: 3rem; border-bottom: 4px solid #ccc; min-width: 100px; text-align: center; min-height: 60px; }
+        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: auto; }
+        .key { background: #fff; border: 2px solid #eee; border-radius: 12px; font-size: 1.8rem; font-weight: bold; padding: 15px; text-align: center; cursor: pointer; box-shadow: 0 4px 0 #eee; }
         .key:active { transform: translateY(4px); box-shadow: none; }
         .key-ok { background: var(--secondary); color: white; border-color: #388E3C; box-shadow: 0 4px 0 #388E3C; }
-
-        /* REPASO */
-        .study-row { padding: 15px; border-bottom: 1px solid #eee; font-size: 1.5rem; text-align: center; color: #555; }
-        .study-row b { color: var(--accent); }
-
         /* RELAX */
-        .relax-screen { background: #E0F7FA; text-align: center; justify-content: center; }
-        .relax-circle {
-            width: 220px; height: 220px; background: #7E57C2; border-radius: 50%;
-            margin: 0 auto; display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.8rem; font-weight: bold;
-            box-shadow: 0 0 40px rgba(126, 87, 194, 0.5);
-            animation: breathe 5s infinite ease-in-out;
-        }
-        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-
-        /* MODAL */
-        .modal { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99; display:none; justify-content:center; align-items:center; }
-        .modal-box { background:white; padding:30px; border-radius:20px; text-align:center; width:80%; animation: pop 0.4s; }
-        @keyframes pop { from{transform:scale(0);} to{transform:scale(1);} }
+        .relax-circle { width: 200px; height: 200px; background: #7E57C2; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; animation: breathe 4s infinite ease-in-out; margin: 40px auto; }
+        @keyframes breathe { 0%,100%{transform:scale(1);} 50%{transform:scale(1.2);} }
     </style>
 </head>
 <body>
 
 <div id="app">
-
     <div id="scr-home" class="screen active center">
-        <img src="MateMagiaApp_Ico_Lego.png" class="logo-img">
+        <img src="MateMagiaApp_Ico_Lego.png" class="logo">
         <h1>Mate Magia</h1>
         <p>¡Aprende las tablas jugando!</p>
         <div class="flex"></div>
         <button class="btn btn-green" onclick="App.start()">¡ENTRAR A CLASE!</button>
-        <button class="btn btn-outline" onclick="App.nav('scr-users')">CAMBIAR ALUMNO</button>
+        <button class="btn btn-outline" onclick="App.nav('scr-help')">¿CÓMO JUGAR?</button>
     </div>
 
-    <div id="scr-users" class="screen">
-        <h2>¿Quién va a jugar?</h2>
-        <div id="users-list" class="flex" style="overflow-y: auto; padding: 10px;"></div>
-        <button class="btn" onclick="User.createMode()">+ NUEVO ALUMNO</button>
+    <div id="scr-login" class="screen center">
+        <h2>¿Cómo te llamas?</h2>
+        <input type="text" id="input-name" placeholder="Tu nombre" maxlength="12">
+        <button class="btn btn-green" onclick="User.save()">GUARDAR Y ENTRAR</button>
         <button class="btn btn-outline" onclick="App.nav('scr-home')">VOLVER</button>
-    </div>
-
-    <div id="scr-create" class="screen center">
-        <h2 id="create-title">Nuevo Alumno</h2>
-        <div id="avatar-container" class="avatar-grid"></div>
-        <input type="text" id="user-name" placeholder="Escribe tu nombre" maxlength="10">
-        <div class="flex"></div>
-        <button class="btn btn-green" onclick="User.save()">GUARDAR</button>
-        <button class="btn btn-red" id="btn-delete" style="display:none;" onclick="User.delete()">ELIMINAR</button>
-        <button class="btn btn-outline" onclick="App.nav('scr-users')">CANCELAR</button>
     </div>
 
     <div id="scr-dash" class="screen">
         <div class="top-bar">
-            <div>
-                <div id="dash-name" style="font-weight:900; font-size:1.2rem;"></div>
-                <div style="font-size:0.9rem;">⭐ <span id="dash-score">0</span></div>
-            </div>
-            <div id="dash-medals" class="medals"></div>
+            <div><b id="dash-name" style="font-size:1.2rem"></b><br><small style="color:#888">Puntos: <span id="dash-score">0</span></small></div>
+            <button class="btn-outline" style="width:auto; padding:5px 10px; margin:0;" onclick="User.changeName()">✎</button>
         </div>
-
-        <h3 style="color:var(--accent); text-align:center;">Elige tu Misión:</h3>
-        
-        <div class="grid-menu flex">
+        <h3 style="text-align:center; color:var(--accent)">Elige tu misión:</h3>
+        <div class="grid-menu flex" style="overflow-y:auto; padding-bottom:10px;">
             <div class="menu-item random" onclick="Game.init('random')">🎲 QUIZ SORPRESA</div>
-            <div id="table-buttons" style="display:contents"></div>
+            <div id="tables-grid" style="display:contents"></div>
         </div>
-
         <div class="row">
-            <button class="btn btn-outline" onclick="App.nav('scr-review-menu')">📘 REPASAR</button>
+            <button class="btn btn-outline" onclick="App.nav('scr-review')">📘 REPASAR</button>
             <button class="btn btn-red" onclick="App.nav('scr-home')">SALIR</button>
         </div>
     </div>
 
-    <div id="scr-game" class="screen">
-        <div class="game-header">
-            <button class="btn-outline" style="width:auto; padding:5px 12px;" onclick="Game.exit()">II</button>
-            <div class="progress-bg"><div id="game-bar" class="progress-fill"></div></div>
-            <span style="font-weight:bold; color:var(--primary-dark)">⭐ <span id="game-pts">0</span></span>
+    <div id="scr-game" class="screen center">
+        <div class="top-bar" style="width:100%">
+            <button class="btn-outline" style="width:auto; padding:5px 10px; margin:0" onclick="Game.exit()">✖</button>
+            <span style="font-weight:bold; color:var(--accent)">⭐ <span id="game-pts">0</span></span>
         </div>
-
-        <div class="q-box">
-            <div id="q-txt" class="q-text"></div>
-            <div id="a-txt" class="ans-text"></div>
+        <div class="flex center">
+            <div id="q-txt" class="q-text">2 x 2</div>
+            <div id="ans-txt" class="ans-text"></div>
         </div>
-
-        <div class="numpad">
-            <div class="key" onclick="Game.input(1)">1</div>
-            <div class="key" onclick="Game.input(2)">2</div>
-            <div class="key" onclick="Game.input(3)">3</div>
-            <div class="key" onclick="Game.input(4)">4</div>
-            <div class="key" onclick="Game.input(5)">5</div>
-            <div class="key" onclick="Game.input(6)">6</div>
-            <div class="key" onclick="Game.input(7)">7</div>
-            <div class="key" onclick="Game.input(8)">8</div>
-            <div class="key" onclick="Game.input(9)">9</div>
-            <div class="key" onclick="Game.del()">⌫</div>
-            <div class="key" onclick="Game.input(0)">0</div>
-            <div class="key key-ok" onclick="Game.check()">OK</div>
+        <div class="numpad" style="width:100%">
+            <div class="key" onclick="Game.in(1)">1</div><div class="key" onclick="Game.in(2)">2</div><div class="key" onclick="Game.in(3)">3</div>
+            <div class="key" onclick="Game.in(4)">4</div><div class="key" onclick="Game.in(5)">5</div><div class="key" onclick="Game.in(6)">6</div>
+            <div class="key" onclick="Game.in(7)">7</div><div class="key" onclick="Game.in(8)">8</div><div class="key" onclick="Game.in(9)">9</div>
+            <div class="key" onclick="Game.del()">⌫</div><div class="key" onclick="Game.in(0)">0</div><div class="key key-ok" onclick="Game.check()">OK</div>
         </div>
-        <button class="btn btn-outline" style="margin-top:10px" onclick="Audio.relax()">☕ DESCANSO</button>
+        <button class="btn btn-outline" style="margin-top:15px" onclick="Audio.relax()">☕ DESCANSO</button>
     </div>
 
-    <div id="scr-review-menu" class="screen">
-        <div class="top-bar">
-            <h2>Estudiar</h2>
-            <button class="btn-outline" style="width:auto; padding:5px 12px" onclick="App.nav('scr-dash')">X</button>
-        </div>
+    <div id="scr-review" class="screen">
+        <div class="top-bar"><h2>Estudiar</h2><button class="btn-outline" style="width:auto; padding:5px 10px; margin:0" onclick="App.nav('scr-dash')">✖</button></div>
         <div class="grid-menu" id="review-grid"></div>
     </div>
 
     <div id="scr-study" class="screen">
-        <div class="top-bar">
-            <h2 id="st-title">Tabla del 1</h2>
-            <button class="btn-outline" style="width:auto; padding:5px 12px" onclick="App.nav('scr-review-menu')">X</button>
-        </div>
-        <div id="st-list" class="flex" style="overflow-y: auto;"></div>
-        <div class="row">
-            <button class="btn btn-outline" onclick="Study.prev()">⬅</button>
-            <button class="btn btn-green" onclick="Study.next()">➡</button>
-        </div>
+        <div class="top-bar"><h2 id="st-title">Tabla</h2><button class="btn-outline" style="width:auto; padding:5px 10px; margin:0" onclick="App.nav('scr-review')">✖</button></div>
+        <div id="st-content" class="flex" style="overflow-y:auto; font-size:1.5rem; text-align:center; line-height:2;"></div>
     </div>
 
-    <div id="scr-relax" class="screen relax-screen">
-        <h2 style="color:#673AB7; margin-bottom: 40px;">Zona de Relax</h2>
+    <div id="scr-relax" class="screen center" style="background:#E1F5FE">
+        <h2 style="color:#7E57C2">Zona de Relax</h2>
         <div class="relax-circle">Respira</div>
-        <div class="flex"></div>
-        <button class="btn" style="background:#673AB7; color:white;" onclick="Audio.stopRelax()">VOLVER A CLASE</button>
+        <button class="btn" style="background:#7E57C2; color:white; width:auto; margin-top:40px" onclick="Audio.stopRelax()">VOLVER</button>
     </div>
 
-    <div id="modal" class="modal">
-        <div class="modal-box">
-            <div style="font-size:5rem;">🏆</div>
-            <h2 id="m-title">¡Excelente!</h2>
-            <p id="m-msg">Has ganado una medalla</p>
-            <button class="btn btn-green" onclick="document.getElementById('modal').style.display='none'">¡GENIAL!</button>
-        </div>
+    <div id="scr-help" class="screen">
+        <h2>Instrucciones</h2>
+        <p>1. Gana monedas respondiendo bien.<br>2. Usa el botón Descanso si te cansas.</p>
+        <button class="btn" onclick="App.nav('scr-home')">ENTENDIDO</button>
     </div>
-
 </div>
 
 <script>
-    /** --- AUDIO --- */
-    const Audio = {
-        ctx: null, timer: null,
-        init: () => { if(!Audio.ctx) Audio.ctx = new (window.AudioContext||window.webkitAudioContext)(); if(Audio.ctx.state==='suspended') Audio.ctx.resume(); },
-        tone: (f, t, d, v=0.1) => {
-            if(!Audio.ctx) return;
-            let o=Audio.ctx.createOscillator(), g=Audio.ctx.createGain();
-            o.type=t; o.frequency.value=f;
-            g.gain.setValueAtTime(0, Audio.ctx.currentTime);
-            g.gain.linearRampToValueAtTime(v, Audio.ctx.currentTime+0.05);
-            g.gain.exponentialRampToValueAtTime(0.001, Audio.ctx.currentTime+d);
-            o.connect(g); g.connect(Audio.ctx.destination);
-            o.start(); o.stop(Audio.ctx.currentTime+d);
-        },
-        click: () => Audio.tone(400, 'triangle', 0.1),
-        good: () => { Audio.tone(600, 'sine', 0.1); setTimeout(()=>Audio.tone(900,'sine',0.3),100); },
-        bad: () => Audio.tone(150, 'sawtooth', 0.4),
-        win: () => { [523,659,784,1046].forEach((f,i)=>setTimeout(()=>Audio.tone(f,'square',0.4), i*150)); },
-        speak: (tx) => {
-            window.speechSynthesis.cancel();
-            let u = new SpeechSynthesisUtterance(tx);
-            u.lang='es-ES'; u.rate=0.9;
-            window.speechSynthesis.speak(u);
-        },
-        relax: () => {
-            App.nav('scr-relax');
-            const n=[196,220,246,293,329];
-            Audio.timer = setInterval(() => Audio.tone(n[Math.floor(Math.random()*n.length)], 'sine', 3, 0.05), 2500);
-        },
-        stopRelax: () => { clearInterval(Audio.timer); App.nav('scr-game'); }
+    const Audio={ctx:null, tmr:null,
+        init:()=>{if(!Audio.ctx) Audio.ctx=new (window.AudioContext||window.webkitAudioContext)(); if(Audio.ctx.state==='suspended')Audio.ctx.resume();},
+        play:(f,t,d,v=0.1)=>{if(!Audio.ctx)return; let o=Audio.ctx.createOscillator(),g=Audio.ctx.createGain(); o.type=t; o.frequency.value=f; g.gain.setValueAtTime(0,Audio.ctx.currentTime); g.gain.linearRampToValueAtTime(v,Audio.ctx.currentTime+0.05); g.gain.exponentialRampToValueAtTime(0.001,Audio.ctx.currentTime+d); o.connect(g); g.connect(Audio.ctx.destination); o.start(); o.stop(Audio.ctx.currentTime+d);},
+        click:()=>Audio.play(400,'triangle',0.1), good:()=>{Audio.play(600,'sine',0.1);setTimeout(()=>Audio.play(900,'sine',0.2),100);}, bad:()=>Audio.play(150,'sawtooth',0.3),
+        speak:(t)=>{window.speechSynthesis.cancel(); let u=new SpeechSynthesisUtterance(t); u.lang='es-ES'; window.speechSynthesis.speak(u);},
+        relax:()=>{App.nav('scr-relax'); const n=[196,220,246,293,329]; Audio.tmr=setInterval(()=>Audio.play(n[Math.floor(Math.random()*n.length)],'sine',3,0.03),2000);},
+        stopRelax:()=>{clearInterval(Audio.tmr); App.nav('scr-game');}
     };
 
-    /** --- DATOS --- */
-    const AVATARS = ['🦉','🦊','🐯','🦁','🐸','🐼'];
-    let DB = JSON.parse(localStorage.getItem('mm_final')) || { users:[] };
-    let CURR = null; 
-    let EDIT_IDX = -1;
-    let TEMP_AV = AVATARS[0];
+    let DB = JSON.parse(localStorage.getItem('mm_simple_v1')) || { name:'', score:0 };
 
-    const App = {
-        nav: (id) => {
-            Audio.click();
-            document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        },
-        start: () => {
-            Audio.init();
-            if(DB.users.length===0) User.createMode();
-            else { User.renderList(); App.nav('scr-users'); }
-        },
-        save: () => localStorage.setItem('mm_final', JSON.stringify(DB))
+    const App={
+        nav:(id)=>{Audio.click(); document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active');},
+        start:()=>{Audio.init(); if(!DB.name) App.nav('scr-login'); else User.load();},
+        save:()=>{localStorage.setItem('mm_simple_v1', JSON.stringify(DB));}
     };
 
-    const User = {
-        createMode: () => {
-            if(DB.users.length>=3) return alert("Máximo 3 alumnos");
-            EDIT_IDX = -1; TEMP_AV = AVATARS[0];
-            document.getElementById('create-title').innerText = "Nuevo Alumno";
-            document.getElementById('user-name').value = "";
-            document.getElementById('btn-delete').style.display = "none";
-            User.renderAvatars();
-            App.nav('scr-create');
+    const User={
+        save:()=>{let n=document.getElementById('input-name').value.trim(); if(!n)return alert('Escribe nombre'); DB.name=n; App.save(); User.load();},
+        load:()=>{
+            document.getElementById('dash-name').innerText=DB.name; document.getElementById('dash-score').innerText=DB.score;
+            let tg='', rg=''; for(let i=1;i<=10;i++){ tg+=`<div class="menu-item" onclick="Game.init(${i})">Tabla ${i}</div>`; rg+=`<div class="menu-item" onclick="Study.open(${i})">Tabla ${i}</div>`; }
+            document.getElementById('tables-grid').innerHTML=tg; document.getElementById('review-grid').innerHTML=rg;
+            Audio.speak('Hola '+DB.name); App.nav('scr-dash');
         },
-        editMode: (idx) => {
-            EDIT_IDX = idx; TEMP_AV = DB.users[idx].av;
-            document.getElementById('create-title').innerText = "Editar Alumno";
-            document.getElementById('user-name').value = DB.users[idx].name;
-            document.getElementById('btn-delete').style.display = "block";
-            User.renderAvatars();
-            App.nav('scr-create');
-        },
-        renderAvatars: () => {
-            let h = '';
-            AVATARS.forEach(a => h += `<div class="av-opt ${a===TEMP_AV?'selected':''}" onclick="User.selAv('${a}')">${a}</div>`);
-            document.getElementById('avatar-container').innerHTML = h;
-        },
-        selAv: (a) => { Audio.click(); TEMP_AV=a; User.renderAvatars(); },
-        save: () => {
-            let n = document.getElementById('user-name').value.trim();
-            if(!n) return alert("Pon un nombre");
-            if(EDIT_IDX === -1) { // Create
-                DB.users.push({ name:n, av:TEMP_AV, sc:0, md:[] });
-                User.login(DB.users.length-1);
-            } else { // Edit
-                DB.users[EDIT_IDX].name = n;
-                DB.users[EDIT_IDX].av = TEMP_AV;
-                User.login(EDIT_IDX);
-            }
-            App.save();
-        },
-        delete: () => {
-            if(confirm("¿Borrar alumno?")) {
-                DB.users.splice(EDIT_IDX, 1);
-                App.save(); App.start();
-            }
-        },
-        renderList: () => {
-            let h = '';
-            DB.users.forEach((u,i) => {
-                h += `<div class="user-card" onclick="User.login(${i})">
-                    <div class="u-av">${u.av}</div>
-                    <div class="u-info"><div class="u-name">${u.name}</div><div class="u-score">⭐ ${u.sc}</div></div>
-                    <div style="color:#ccc; font-size:1.5rem" onclick="event.stopPropagation(); User.editMode(${i})">⚙️</div>
-                </div>`;
-            });
-            document.getElementById('users-list').innerHTML = h;
-        },
-        login: (idx) => {
-            CURR = DB.users[idx];
-            document.getElementById('dash-name').innerText = CURR.name;
-            document.getElementById('dash-avatar').innerText = CURR.av;
-            document.getElementById('dash-score').innerText = CURR.sc;
-            
-            // Medals
-            let mH = '';
-            if(CURR.sc>=50) mH+='🥉'; if(CURR.sc>=150) mH+='🥈';
-            if(CURR.sc>=300) mH+='🥇'; if(CURR.sc>=500) mH+='💎';
-            document.getElementById('dash-medals').innerText = mH;
-
-            // Render Tables
-            let tH = '', rH = '';
-            for(let i=1; i<=10; i++) {
-                tH += `<div class="menu-item" onclick="Game.init(${i})">Tabla ${i}</div>`;
-                rH += `<div class="menu-item" onclick="Study.open(${i})">Tabla ${i}</div>`;
-            }
-            document.getElementById('table-buttons').innerHTML = tH;
-            document.getElementById('review-grid').innerHTML = rH;
-
-            Audio.speak("Hola " + CURR.name);
-            App.nav('scr-dash');
-        }
+        changeName:()=>{DB.name=''; App.nav('scr-login');}
     };
 
-    const Game = {
+    const Game={
         t:1, q:0, sc:0, max:10, n1:0, n2:0, ans:0,
-        init: (table) => {
-            Game.t = table; Game.q = 0; Game.sc = 0;
-            document.getElementById('game-pts').innerText = 0;
-            Game.next();
-            App.nav('scr-game');
-        },
-        next: () => {
-            document.getElementById('ans-text').innerText = "";
-            if(Game.q >= Game.max) return Game.end();
-            Game.q++;
-            document.getElementById('game-bar').style.width = ((Game.q-1)/Game.max*100)+'%';
-            
-            let n1 = (Game.t==='random') ? Math.ceil(Math.random()*10) : Game.t;
-            let n2 = Math.ceil(Math.random()*10);
+        init:(t)=>{Game.t=t; Game.sc=0; Game.q=0; document.getElementById('game-pts').innerText=0; Game.next(); App.nav('scr-game');},
+        next:()=>{
+            document.getElementById('ans-txt').innerText=''; if(Game.q>=Game.max){ alert(`Fin! Aciertos: ${Game.sc}/${Game.max}`); return User.load(); }
+            Game.q++; let n1=(Game.t==='random')?Math.ceil(Math.random()*10):Game.t, n2=Math.ceil(Math.random()*10);
             Game.n1=n1; Game.n2=n2; Game.ans=n1*n2;
-            
-            document.getElementById('q-txt').innerText = `${n1} x ${n2}`;
-            Audio.speak(`${n1} por ${n2}`);
+            document.getElementById('q-txt').innerText=`${n1} x ${n2}`; Audio.speak(`${n1} por ${n2}`);
         },
-        input: (n) => { Audio.click(); document.getElementById('ans-text').innerText += n; },
-        del: () => { Audio.click(); let t=document.getElementById('ans-text'); t.innerText=t.innerText.slice(0,-1); },
-        check: () => {
-            let v = parseInt(document.getElementById('ans-text').innerText);
-            if(isNaN(v)) return;
-            if(v === Game.ans) {
-                Audio.good(); Game.sc++; CURR.sc++;
-                App.save(); Game.next();
-            } else {
-                Audio.bad(); Audio.speak("No. Es " + Game.ans);
-                alert(`Respuesta correcta: ${Game.ans}`);
-                Game.next();
-            }
-            document.getElementById('game-pts').innerText = Game.sc;
+        in:(n)=>{Audio.click(); let el=document.getElementById('ans-txt'); if(el.innerText.length<3)el.innerText+=n;},
+        del:()=>{Audio.click(); let el=document.getElementById('ans-txt'); el.innerText=el.innerText.slice(0,-1);},
+        check:()=>{
+            let v=parseInt(document.getElementById('ans-txt').innerText); if(isNaN(v))return;
+            if(v===Game.ans){ Audio.good(); Game.sc++; DB.score++; App.save(); Game.next(); }
+            else{ Audio.bad(); Audio.speak('No. Es '+Game.ans); alert(`Era ${Game.ans}`); Game.next(); }
+            document.getElementById('game-pts').innerText=Game.sc;
         },
-        end: () => {
-            Audio.win();
-            document.getElementById('m-title').innerText = "¡Misión Cumplida!";
-            document.getElementById('m-msg').innerText = `Aciertos: ${Game.sc} / ${Game.max}`;
-            document.getElementById('modal').style.display = 'flex';
-            User.login(DB.users.indexOf(CURR)); // Refresh dash
-        },
-        exit: () => { if(confirm("¿Salir?")) App.nav('scr-dash'); }
+        exit:()=>{if(confirm('¿Salir?')) User.load();}
     };
 
-    const Study = {
-        c: 1,
-        open: (t) => {
-            Study.c = t;
-            document.getElementById('study-title').innerText = "Tabla del " + t;
-            let h = '';
-            for(let i=1; i<=10; i++) h += `<div class="study-row">${t} x ${i} = <b>${t*i}</b></div>`;
-            document.getElementById('st-list').innerHTML = h;
-            App.nav('scr-study');
-        },
-        next: () => { if(Study.c<10) Study.open(Study.c+1); },
-        prev: () => { if(Study.c>1) Study.open(Study.c-1); }
+    const Study={
+        open:(t)=>{
+            document.getElementById('st-title').innerText='Tabla del '+t; let h='';
+            for(let i=1;i<=10;i++) h+=`<div>${t} x ${i} = <b>${t*i}</b></div>`;
+            document.getElementById('st-content').innerHTML=h; App.nav('scr-study');
+        }
     };
 </script>
 </body>
