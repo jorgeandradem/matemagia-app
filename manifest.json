@@ -1,10 +1,11 @@
 {
-  "name": "MateMagia Pro",
+  "name": "Mate Magia",
   "short_name": "MateMagia",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#58cc02",
+  "theme_color": "#FFC107",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "MateMagiaApp_Ico_Lego.png",
