@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MateMagia Pro</title>
+    
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#58cc02">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="MateMagiaApp_Ico_Lego.png">
 
@@ -14,57 +16,48 @@
             --secondary: #1cb0f6; --secondary-dark: #1899d6;
             --accent: #ffc800; --error: #ff4b4b;
             --text: #4b4b4b; --bg: #ffffff; --radius: 20px;
-            --relax-bg: #e0f7fa; --relax-circle: #a594f9; 
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Nunito', sans-serif; margin: 0; background: #f0f0f0; height: 100dvh; display: flex; justify-content: center; overflow: hidden; }
-
-        #app-container { width: 100%; max-width: 480px; height: 100%; background: var(--bg); position: relative; display: flex; flex-direction: column; }
-
-        /* NAVEGACIÓN POR PANTALLAS INDEPENDIENTES */
-        .screen { display: none; flex-direction: column; height: 100%; padding: 20px; animation: fadeIn 0.3s ease; }
-        .screen.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .flex { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
         
-        /* CABECERAS Y PIES PEGADOS */
-        .header-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #eee; margin-bottom: 5px; }
-        .footer-nav { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; }
+        body { font-family: 'Nunito', sans-serif; background: #f0f0f0; height: 100dvh; display: flex; justify-content: center; overflow: hidden; }
 
-        /* BOTONES DUOLINGO */
+        #app-container { width: 100%; max-width: 480px; height: 100%; background: var(--bg); position: relative; }
+
+        .screen { display: none; flex-direction: column; height: 100%; padding: 15px; background: var(--bg); }
+        .screen.active { display: flex; }
+
+        .center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; flex: 1; }
+
+        /* BOTONES */
         .btn {
             background: var(--primary); color: white; border: none; padding: 16px; border-radius: 16px;
             font-size: 1.2rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0 var(--primary-dark);
-            width: 100%; text-transform: uppercase; margin: 8px 0;
+            width: 100%; text-transform: uppercase; margin: 8px 0; display: block;
         }
         .btn:active { transform: translateY(4px); box-shadow: none; }
         .btn-blue { background: var(--secondary); box-shadow: 0 4px 0 var(--secondary-dark); }
         .btn-red { background: var(--error); box-shadow: 0 4px 0 #d13030; }
         .btn-outline { background: transparent; border: 2px solid #ddd; color: #888; box-shadow: none; }
 
-        /* JUEGO: LETRAS GRANDES */
-        .q-text { font-size: 4.5rem; font-weight: 900; color: var(--secondary); margin: 0; }
-        .ans-highlight { color: var(--text); }
+        /* DASHBOARD COMPACTO */
+        .top-info { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 2px solid #eee; margin-bottom: 5px; }
+        .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; overflow-y: auto; margin: 5px 0; }
+        .card-t { border: 2px solid #eee; border-radius: 15px; padding: 12px; text-align: center; font-weight: 800; cursor: pointer; background: #fff; }
 
-        /* TECLADO ADAPTATIVO */
-        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; height: 40%; margin-bottom: 10px; }
-        .key { background: white; border: 2px solid #eee; border-radius: 16px; font-size: 1.8rem; font-weight: 800; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 0 #ddd; cursor: pointer; }
-        .key:active { transform: translateY(4px); box-shadow: none; }
+        /* JUEGO */
+        .q-text { font-size: 4rem; font-weight: 900; color: var(--secondary); text-align: center; padding: 20px 0; }
+        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; height: 40%; }
+        .key { background: white; border: 2px solid #eee; border-radius: 15px; font-size: 1.8rem; font-weight: 800; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 0 #ddd; cursor: pointer; }
         .key-ok { background: var(--primary); color: white; border-color: var(--primary-dark); box-shadow: 0 4px 0 var(--primary-dark); }
 
-        /* RELAX */
-        .relax-circle { width: 200px; height: 200px; background: var(--relax-circle); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 1.8rem; font-weight: bold; animation: breathe 4s infinite ease-in-out; box-shadow: 0 0 40px rgba(165,148,249,0.5); }
+        /* RELAX PANTALLA APARTE */
+        #scr-relax { background: #e0f7fa; }
+        .relax-circle { width: 220px; height: 220px; background: #a594f9; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 2rem; font-weight: bold; animation: breathe 4s infinite ease-in-out; box-shadow: 0 0 50px rgba(165,148,249,0.5); }
         @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
-        /* CONFETTI */
-        .confetti { position: absolute; width: 10px; height: 10px; z-index: 100; animation: fall 3s linear forwards; }
-        @keyframes fall { to { transform: translateY(100dvh) rotate(720deg); } }
-
-        /* LISTA PERFILES */
-        .user-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; }
-        .profile-card { border: 2px solid #eee; border-radius: 16px; padding: 15px; text-align: center; cursor: pointer; background: white; }
+        /* MODAL */
+        .modal { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; flex-direction:column; justify-content:center; align-items:center; z-index:999; color:white; }
     </style>
 </head>
 <body>
@@ -72,95 +65,86 @@
 <div id="app-container">
 
     <div id="scr-home" class="screen active">
-        <div class="flex">
+        <div class="center">
             <span style="font-size:5rem;">🦉</span>
-            <img src="MateMagiaApp_Ico_Lego.png" style="width:180px; margin: 15px 0;">
+            <img src="MateMagiaApp_Ico_Lego.png" style="width:180px; margin: 10px 0;">
+            <h1 style="color:var(--secondary)">MateMagia</h1>
             <p style="color:#888; font-weight:bold;">¡Aprende las tablas jugando!</p>
         </div>
-        <button class="btn" onclick="App.initApp()">¡Entrar a Clase!</button>
-        <button class="btn btn-blue" onclick="App.nav('scr-help')">¿Cómo jugar?</button>
-    </div>
-
-    <div id="scr-help" class="screen">
-        <h2>Instrucciones</h2>
-        <div class="flex" style="align-items: flex-start; text-align: left; font-size: 1.2rem;">
-            <p>✅ Elige una tabla para practicar.</p>
-            <p>🪙 Gana monedas por cada acierto.</p>
-            <p>🧘 Usa el descanso para relajarte.</p>
-        </div>
-        <button class="btn" onclick="App.nav('scr-home')">Entendido</button>
-    </div>
-
-    <div id="scr-users" class="screen">
-        <h2 style="margin-bottom:20px;">¿Quién va a jugar?</h2>
-        <div id="list-users" class="user-grid flex" style="justify-content: flex-start;"></div>
-        <button class="btn btn-red" onclick="App.nav('scr-home')">Volver</button>
+        <button class="btn" onclick="App.init()">¡ENTRAR A CLASE!</button>
+        <button class="btn btn-blue" onclick="App.nav('scr-help')">¿CÓMO JUGAR?</button>
     </div>
 
     <div id="scr-login" class="screen">
-        <div class="flex">
+        <div class="center">
             <h2>Nuevo Alumno</h2>
-            <input type="text" id="in-name" placeholder="Escribe tu nombre" style="width:100%; padding:15px; border-radius:15px; border:2px solid #ddd; text-align:center; font-size:1.5rem;">
+            <input type="text" id="in-name" placeholder="TU NOMBRE" style="width:100%; padding:15px; border-radius:15px; border:2px solid #ddd; text-align:center; font-size:1.8rem; margin-top:20px;">
         </div>
-        <button class="btn" onclick="User.save()">¡INICIAR!</button>
+        <button class="btn btn-blue" onclick="User.save()">¡INICIAR!</button>
         <button class="btn btn-red" onclick="App.nav('scr-home')">TERMINAR</button>
     </div>
 
     <div id="scr-dash" class="screen">
-        <div class="header-top">
-            <b id="d-name" style="font-size:1.3rem; color:var(--secondary);"></b>
-            <span style="font-weight:bold;">🪙 <span id="d-score">0</span></span>
+        <div class="top-info">
+            <b id="d-name" style="font-size:1.4rem; color:var(--primary-dark);"></b>
+            <span style="font-weight:bold; font-size:1.2rem;">🪙 <span id="d-score">0</span></span>
         </div>
         <h3 style="margin:5px 0;">Elige tu misión:</h3>
-        <div class="user-grid flex" id="list-missions" style="overflow-y:auto; padding-bottom:10px;"></div>
-        <div class="footer-nav">
-            <button class="btn btn-blue" style="flex:1" onclick="Study.openMenu()">📘 Repasar</button>
-            <button class="btn btn-red" style="flex:1" onclick="App.nav('scr-home')">Terminar</button>
+        <div class="mission-grid" id="m-list"></div>
+        <div style="margin-top:10px;">
+            <button class="btn btn-blue" onclick="Study.open()">📘 REPASAR TABLAS</button>
+            <button class="btn btn-red" id="btn-end-dash" onclick="App.nav('scr-home')">TERMINAR Y SALIR</button>
         </div>
     </div>
 
     <div id="scr-study" class="screen">
         <h2 id="st-title">Tabla del 1</h2>
-        <div id="st-content" class="flex" style="font-size:1.8rem; line-height:1.6; overflow-y:auto;"></div>
-        <div class="footer-nav">
-            <button class="btn btn-blue" style="flex:1" onclick="Study.move(-1)">⬅ Atrás</button>
-            <button class="btn btn-red" style="flex:1" onclick="App.nav('scr-dash')">Salir</button>
-            <button class="btn btn-blue" style="flex:1" onclick="Study.move(1)">Sig ➡</button>
+        <div id="st-box" class="center" style="font-size:2rem; line-height:1.5;"></div>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button class="btn btn-blue" style="flex:1" onclick="Study.move(-1)">⬅</button>
+            <button class="btn btn-red" style="flex:1" onclick="App.nav('scr-dash')">SALIR</button>
+            <button class="btn btn-blue" style="flex:1" onclick="Study.move(1)">➡</button>
         </div>
     </div>
 
     <div id="scr-game" class="screen">
-        <div class="header-top">
-            <button class="btn-outline" style="width:auto; padding:5px 10px; border-radius:10px;" onclick="App.nav('scr-dash')">II</button>
-            <span style="font-weight:bold; color:var(--accent);">⭐ <span id="g-pts">0</span></span>
+        <div class="header-top" style="display:flex; justify-content:space-between; align-items:center;">
+            <button class="btn-outline" style="padding:5px 15px; border-radius:10px" onclick="App.nav('scr-dash')">PAUSA</button>
+            <span style="font-weight:bold; color:var(--accent); font-size:1.4rem;">⭐ <span id="g-pts">0</span></span>
         </div>
-        <div class="flex">
+        <div class="center">
             <div id="q-box" class="q-text"></div>
         </div>
         <div class="numpad">
-            <div class="key" onclick="Game.press(1)">1</div><div class="key" onclick="Game.press(2)">2</div><div class="key" onclick="Game.press(3)">3</div>
-            <div class="key" onclick="Game.press(4)">4</div><div class="key" onclick="Game.press(5)">5</div><div class="key" onclick="Game.press(6)">6</div>
-            <div class="key" onclick="Game.press(7)">7</div><div class="key" onclick="Game.press(8)">8</div><div class="key" onclick="Game.press(9)">9</div>
-            <div class="key" onclick="Game.del()">⌫</div><div class="key" onclick="Game.press(0)">0</div><div class="key key-ok" onclick="Game.check()">OK</div>
+            <div class="key" onclick="Game.key(1)">1</div><div class="key" onclick="Game.key(2)">2</div><div class="key" onclick="Game.key(3)">3</div>
+            <div class="key" onclick="Game.key(4)">4</div><div class="key" onclick="Game.key(5)">5</div><div class="key" onclick="Game.key(6)">6</div>
+            <div class="key" onclick="Game.key(7)">7</div><div class="key" onclick="Game.key(8)">8</div><div class="key" onclick="Game.key(9)">9</div>
+            <div class="key" onclick="Game.del()">⌫</div><div class="key" onclick="Game.key(0)">0</div><div class="key key-ok" onclick="Game.check()">OK</div>
         </div>
-        <div class="footer-nav">
-            <button class="btn btn-blue" onclick="Audio.startRelax()">☕ Descanso</button>
-        </div>
+        <button class="btn btn-blue" onclick="Audio.startRelax()">☕ DESCANSO</button>
     </div>
 
-    <div id="scr-relax" class="screen center" style="background:var(--relax-bg); display:none;">
-        <div class="flex">
-            <h2 style="color:#5e35b1;">Zona de Relax</h2>
-            <p>Inhala... Exhala...</p>
+    <div id="scr-relax" class="screen">
+        <div class="center">
+            <h2 style="color:#5e35b1; margin-bottom:20px;">Zona de Relax</h2>
             <div class="relax-circle">Respira</div>
+            <p style="margin-top:20px; color:#5e35b1; font-weight:bold;">Sigue el ritmo...</p>
         </div>
-        <button class="btn" style="width:auto; padding:15px 40px;" onclick="Audio.stopRelax()">Volver a Clase</button>
+        <button class="btn btn-green" onclick="Audio.stopRelax()">Volver a Clase</button>
     </div>
 
-    <div id="modal-msg" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; flex-direction:column; justify-content:center; align-items:center; z-index:200; color:white; text-align:center; padding:20px;">
-        <h1 id="m-title" style="font-size:3rem;">¡BIEN!</h1>
-        <p id="m-text" style="font-size:1.5rem;"></p>
-        <button class="btn" style="width:200px;" onclick="Game.next()">Continuar</button>
+    <div id="scr-help" class="screen">
+        <div class="center">
+            <h1>¿Cómo jugar?</h1>
+            <p style="font-size:1.3rem; line-height:2;">1. Elige una misión.<br>2. Responde rápido.<br>3. ¡Gana medallas!</p>
+        </div>
+        <button class="btn" onclick="App.nav('scr-home')">ENTENDIDO</button>
+    </div>
+
+    <div id="modal" class="modal">
+        <h1 id="modal-t" style="font-size:3rem;">¡BIEN!</h1>
+        <p id="modal-p" style="font-size:1.5rem; margin:20px 0;"></p>
+        <button class="btn" style="width:200px" onclick="Game.next()">SIGUIENTE</button>
     </div>
 
 </div>
@@ -169,57 +153,37 @@
     const Audio = {
         ctx: null, timer: null,
         init() { if(!this.ctx) this.ctx = new (window.AudioContext||window.webkitAudioContext)(); },
-        play(f, d=0.1) {
+        play(f, d=1) {
             this.init(); if(this.ctx.state==='suspended') this.ctx.resume();
             let o=this.ctx.createOscillator(), g=this.ctx.createGain();
-            o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(0.1, this.ctx.currentTime);
+            o.type='sine'; o.frequency.value=f;
+            g.gain.setValueAtTime(0.05, this.ctx.currentTime);
             g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime+d);
             o.connect(g); g.connect(this.ctx.destination); o.start(); o.stop(this.ctx.currentTime+d);
         },
         speak(t) { window.speechSynthesis.cancel(); let u=new SpeechSynthesisUtterance(t); u.lang='es-ES'; u.pitch=1.7; window.speechSynthesis.speak(u); },
         startRelax() { 
-            document.getElementById('scr-relax').style.display='flex';
-            this.timer = setInterval(() => this.play([261,329,392,523][Math.floor(Math.random()*4)], 2), 1500);
+            App.nav('scr-relax'); 
+            this.timer = setInterval(() => this.play([261,329,392,523][Math.floor(Math.random()*4)], 3), 1500);
         },
-        stopRelax() { clearInterval(this.timer); document.getElementById('scr-relax').style.display='none'; }
+        stopRelax() { clearInterval(this.timer); this.timer = null; App.nav('scr-game'); }
     };
 
-    let DB = JSON.parse(localStorage.getItem('mm_v9')) || { users: {} };
-    let CURR = null;
+    let DB = JSON.parse(localStorage.getItem('mm_v11')) || { name: '', score: 0 };
 
     const App = {
-        nav(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        },
-        initApp() {
-            Audio.init();
-            if(Object.keys(DB.users).length === 0) this.nav('scr-login');
-            else { User.renderList(); this.nav('scr-users'); }
-        }
+        nav(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); },
+        init() { Audio.init(); if(!DB.name) this.nav('scr-login'); else User.dash(); }
     };
 
     const User = {
-        save() {
-            let n = document.getElementById('in-name').value.trim().toUpperCase();
-            if(!n) return;
-            if(!DB.users[n]) DB.users[n] = { score: 0 };
-            localStorage.setItem('mm_v9', JSON.stringify(DB));
-            this.login(n);
-        },
-        renderList() {
-            const el = document.getElementById('list-users'); el.innerHTML = '';
-            Object.keys(DB.users).forEach(n => {
-                el.innerHTML += `<div class="profile-card" onclick="User.login('${n}')"><span>🦉</span><br><b>${n}</b><br><small>⭐ ${DB.users[n].score}</small></div>`;
-            });
-        },
-        login(n) {
-            CURR = DB.users[n]; CURR.name = n;
-            document.getElementById('d-name').innerText = "Hola, " + n;
-            document.getElementById('d-score').innerText = CURR.score;
-            const ml = document.getElementById('list-missions'); ml.innerHTML = '';
-            for(let i=1; i<=10; i++) ml.innerHTML += `<div class="profile-card" onclick="Game.start(${i})">Tabla ${i}</div>`;
-            Audio.speak("Hola " + n); App.nav('scr-dash');
+        save() { let n = document.getElementById('in-name').value.trim().toUpperCase(); if(n) { DB.name = n; localStorage.setItem('mm_v11', JSON.stringify(DB)); this.dash(); } },
+        dash() {
+            document.getElementById('d-name').innerText = "HOLA, " + DB.name;
+            document.getElementById('d-score').innerText = DB.score;
+            let list = document.getElementById('m-list'); list.innerHTML = '';
+            for(let i=1; i<=10; i++) list.innerHTML += `<div class="card-t" onclick="Game.start(${i})">TABLA ${i}</div>`;
+            Audio.speak("Hola " + DB.name); App.nav('scr-dash');
         }
     };
 
@@ -227,48 +191,34 @@
         t:0, q:0, sc:0, ans:0, input:"",
         start(t) { this.t=t; this.q=0; this.sc=0; document.getElementById('g-pts').innerText=0; this.next(); App.nav('scr-game'); },
         next() {
-            document.getElementById('modal-msg').style.display='none';
-            if(this.q >= 10) { alert("¡Misión Cumplida!"); User.login(CURR.name); return; }
+            document.getElementById('modal').style.display='none';
+            if(this.q >= 10) { alert("¡Misión Cumplida!"); User.dash(); return; }
             this.q++; this.input = "";
             let n1 = (this.t==='random')?Math.ceil(Math.random()*10):this.t;
             let n2 = Math.ceil(Math.random()*10); this.ans = n1*n2;
-            document.getElementById('q-box').innerHTML = `${n1} x ${n2} = <span class="ans-highlight">?</span>`;
-            Audio.speak(`${n1} por ${n2}`);
+            document.getElementById('q-box').innerHTML = `${n1} x ${n2} = <span style="color:#000">?</span>`;
+            Audio.speak(n1 + " por " + n2);
         },
-        press(n) { this.input += n; document.querySelector('.ans-highlight').innerText = this.input; Audio.play(400); },
-        del() { this.input = ""; document.querySelector('.ans-highlight').innerText = "?"; },
+        key(n) { this.input += n; document.querySelector('#q-box span').innerText = this.input; },
+        del() { this.input = ""; document.querySelector('#q-box span').innerText = "?"; },
         check() {
             if(!this.input) return;
-            const modal = document.getElementById('modal-msg');
-            if(parseInt(this.input) === this.ans) {
-                this.sc++; CURR.score++; this.confetti(); Audio.play(800);
-                document.getElementById('m-title').innerText = "¡EXCELENTE!";
-                document.getElementById('m-text').innerText = "+1 Moneda";
-            } else {
-                Audio.play(200);
-                document.getElementById('m-title').innerText = "¡CASI!";
-                document.getElementById('m-text').innerText = "Era " + this.ans;
-            }
-            localStorage.setItem('mm_v9', JSON.stringify(DB));
+            const isCorrect = parseInt(this.input) === this.ans;
+            if(isCorrect) { this.sc++; DB.score++; Audio.play(800); document.getElementById('modal-t').innerText="¡BIEN!"; document.getElementById('modal-p').innerText="+1 Moneda"; }
+            else { Audio.play(200); document.getElementById('modal-t').innerText="¡CASI!"; document.getElementById('modal-p').innerText="Era " + this.ans; }
+            localStorage.setItem('mm_v11', JSON.stringify(DB));
             document.getElementById('g-pts').innerText = this.sc;
-            modal.style.display='flex';
-        },
-        confetti() {
-            for(let i=0; i<30; i++) {
-                let c = document.createElement('div'); c.className='confetti';
-                c.style.left = Math.random()*100+'%'; c.style.background=['#f00','#0f0','#00f'][Math.floor(Math.random()*3)];
-                document.body.appendChild(c); setTimeout(()=>c.remove(), 3000);
-            }
+            document.getElementById('modal').style.display='flex';
         }
     };
 
     const Study = {
         curr: 1,
-        openMenu() { this.curr=1; this.render(); App.nav('scr-study'); },
+        open() { this.curr=1; this.render(); App.nav('scr-study'); },
         render() {
-            document.getElementById('st-title').innerText = "Tabla del " + this.curr;
-            let h = ""; for(let i=1; i<=10; i++) h += `<div>${this.curr} x ${i} = <b>${this.curr*i}</b></div>`;
-            document.getElementById('st-content').innerHTML = h;
+            document.getElementById('st-title').innerText = "TABLA DEL " + this.curr;
+            let h = ""; for(let i=1; i<=10; i++) h += `<div>${this.curr} x ${i} = <b style="color:var(--primary-dark)">${this.curr*i}</b></div>`;
+            document.getElementById('st-box').innerHTML = h;
         },
         move(d) { this.curr += d; if(this.curr<1)this.curr=10; if(this.curr>10)this.curr=1; this.render(); }
     };
